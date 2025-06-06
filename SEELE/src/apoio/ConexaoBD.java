@@ -9,8 +9,7 @@ package apoio;
  * @author maicon-dias
  */
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 import java.io.*;
 import java.util.*;
 
@@ -28,15 +27,14 @@ public class ConexaoBD {
             String dbdriver = prop.getProperty("db.driver");
             String dburl = prop.getProperty("db.url");
             String dbuser = prop.getProperty("db.user");
-            String dbsenha = prop.getProperty("db.senha");
-            
+            String dbsenha = "admin";
+
             // Carrega Driver do Banco de Dados
-            Class.forName(dbdriver).newInstance();
+            Class.forName(dbdriver);
 
             if (dbuser.length() != 0) // conexão COM usuário e senha
             {
-                conexao = DriverManager.getConnection(dburl + "?user=" + dbuser + "&password=" + dbsenha);
-                
+                conexao = DriverManager.getConnection(dburl, dbuser, dbsenha);
             } else // conexão SEM usuário e senha
             {
                 conexao = DriverManager.getConnection(dburl);

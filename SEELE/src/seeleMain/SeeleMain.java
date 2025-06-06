@@ -27,11 +27,11 @@ public class SeeleMain {
 //        }
 
         // com classe ConexaoBD.java
-        if(ConexaoBD.getInstance().getConnection() != null) {
+        //if(ConexaoBD.getInstance().getConnection() != null) {
             new LoginView().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Erro ao conectar no Banco de dados!");
-        }
+        //} else {
+        //    JOptionPane.showMessageDialog(null, "Erro ao conectar no Banco de dados!");
+        //}
     } 
 //    private static boolean abrirConexao() {
 //        try {
