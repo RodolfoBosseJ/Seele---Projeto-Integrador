@@ -4,7 +4,7 @@
  */
 package seeleMain;
 
-import apoio.ConexaoBD;
+import apoio.ConexaoMySQL;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import view.LoginView;
@@ -26,8 +26,8 @@ public class SeeleMain {
 //            JOptionPane.showMessageDialog(null, "Erro ao conectar no Banco de Dados!");
 //        }
 
-        // com classe ConexaoBD.java
-        //if(ConexaoBD.getInstance().getConnection() != null) {
+        // com classe ConexaoMySQL.java
+        //if(ConexaoMySQL.getInstance().getConnection() != null) {
             new LoginView().setVisible(true);
         //} else {
         //    JOptionPane.showMessageDialog(null, "Erro ao conectar no Banco de dados!");

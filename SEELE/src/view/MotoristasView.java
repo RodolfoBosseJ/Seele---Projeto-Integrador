@@ -4,6 +4,9 @@
  */
 package view;
 
+import dao.MotoristasDAO;
+import entidade.Motoristas;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,10 +18,12 @@ public class MotoristasView extends javax.swing.JPanel {
     /**
      * Creates new form MotoristasView
      */
-    public MotoristasView() {
+    public MotoristasView(boolean permissao) {
         initComponents();
+        
+        refreshTable(permissao);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,25 +33,6 @@ public class MotoristasView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFrame1 = new javax.swing.JFrame();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
-        txtCPF = new javax.swing.JFormattedTextField();
-        txtCNH = new javax.swing.JTextField();
-        cbCategoria = new javax.swing.JComboBox<>();
-        txtValidade = new javax.swing.JFormattedTextField();
-        jPanel2 = new javax.swing.JPanel();
-        btnCadastrar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
-        btnExcluir = new javax.swing.JButton();
-        btnLimpar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblMotoristas = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -66,169 +52,6 @@ public class MotoristasView extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblMotoristas1 = new javax.swing.JTable();
 
-        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Nome:");
-
-        jLabel2.setText("CPF:");
-
-        jLabel3.setText("CNH:");
-
-        jLabel4.setText("Categoria:");
-
-        jLabel5.setText("Validade:");
-
-        try {
-            txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCPFActionPerformed(evt);
-            }
-        });
-
-        cbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "AB", "C", "D" }));
-
-        txtValidade.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtValidade.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValidadeActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(8, 8, 8)
-                            .addComponent(jLabel4))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel1)))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCNH)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtValidade, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtCPF, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtNome))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtCNH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtValidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        btnCadastrar.setText("Cadastrar");
-        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarActionPerformed(evt);
-            }
-        });
-
-        btnEditar.setText("Editar");
-
-        btnExcluir.setText("Excluir");
-
-        btnLimpar.setText("Limpar");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(75, 75, 75)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCadastrar)
-                    .addComponent(btnExcluir))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEditar)
-                    .addComponent(btnLimpar))
-                .addGap(26, 26, 26))
-        );
-
-        tblMotoristas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Nome", "CPF", "CNH", "Categoria", "Validade"
-            }
-        ));
-        jScrollPane1.setViewportView(tblMotoristas);
-
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrame1Layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jFrame1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrame1Layout.createSequentialGroup()
-                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
-        );
-
         jLabel6.setText("Nome:");
 
         jLabel7.setText("CPF:");
@@ -244,33 +67,26 @@ public class MotoristasView extends javax.swing.JPanel {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txtCPF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCPF1ActionPerformed(evt);
-            }
-        });
 
         cbCategoria1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "AB", "C", "D" }));
 
-        txtValidade1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        txtValidade1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValidade1ActionPerformed(evt);
-            }
-        });
+        try {
+            txtValidade1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(8, 8, 8)
-                            .addComponent(jLabel9))
+                        .addComponent(jLabel9)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                            .addContainerGap()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel6)))
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -282,16 +98,15 @@ public class MotoristasView extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtValidade1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(txtValidade1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtCPF1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtNome1))
-                .addContainerGap())
+                .addGap(8, 8, 8))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNome1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -308,7 +123,8 @@ public class MotoristasView extends javax.swing.JPanel {
                     .addComponent(jLabel9)
                     .addComponent(cbCategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(txtValidade1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtValidade1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnCadastrar1.setText("Cadastrar");
@@ -319,10 +135,25 @@ public class MotoristasView extends javax.swing.JPanel {
         });
 
         btnEditar1.setText("Editar");
+        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditar1ActionPerformed(evt);
+            }
+        });
 
         btnExcluir1.setText("Excluir");
+        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluir1ActionPerformed(evt);
+            }
+        });
 
         btnLimpar1.setText("Limpar");
+        btnLimpar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpar1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -342,7 +173,7 @@ public class MotoristasView extends javax.swing.JPanel {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar1)
                     .addComponent(btnExcluir1))
@@ -350,11 +181,27 @@ public class MotoristasView extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar1)
                     .addComponent(btnLimpar1))
-                .addGap(26, 26, 26))
+                .addGap(24, 24, 24))
         );
 
         tblMotoristas1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -388,68 +235,191 @@ public class MotoristasView extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCPFActionPerformed
+    //Metodo para atualizacao da tabela
+    public void refreshTable (boolean permissao) {
+        if (permissao == false) {
+            btnCadastrar1.setEnabled(false);
+            btnEditar1.setEnabled(false);
+            btnExcluir1.setEnabled(false);
+            btnLimpar1.setEnabled(false);
+        }
+        
+        ArrayList<Motoristas> list = new ArrayList();
+        
+        //realiza a consulta
+        list = new MotoristasDAO().consultarTodos();
 
-    private void txtValidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValidadeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtValidadeActionPerformed
+        int numLinhas = tblMotoristas1.getRowCount();
 
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        JOptionPane.showMessageDialog(this, "Veículo cadastrado!");
-    }//GEN-LAST:event_btnCadastrarActionPerformed
+        //verifica se a tabela precisa ser maior
+        //if (numLinhas < list.size()) {
+        //    tblVeiculos.insertRow();
+        //}
+        
+        //deleta os dados antigos da tabela
+        for (int i = 0; i < numLinhas; i++) {
+            tblMotoristas1.setValueAt(null, i, 0);
+            tblMotoristas1.setValueAt(null, i, 1);
+            tblMotoristas1.setValueAt(null, i, 2);
+            tblMotoristas1.setValueAt(null, i, 3);
+            tblMotoristas1.setValueAt(null, i, 4);
+        }
 
-    private void txtCPF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCPF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCPF1ActionPerformed
-
-    private void txtValidade1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValidade1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtValidade1ActionPerformed
-
+        //Imprime no console e muda o valor na tabela
+        for (int i = 0; i < list.size(); i++) {
+            Motoristas obj = Motoristas.class.cast(list.get(i));
+            
+            tblMotoristas1.setValueAt(obj.getNome(), i, 0);
+            tblMotoristas1.setValueAt(obj.getCpf(), i, 1);
+            tblMotoristas1.setValueAt(obj.getCnh(), i, 2);
+            tblMotoristas1.setValueAt(obj.getCategoriaCnh(), i, 3);
+            tblMotoristas1.setValueAt(obj.getValidadeCnh(), i, 4);
+        }
+    }
+    
     private void btnCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrar1ActionPerformed
-        JOptionPane.showMessageDialog(this, "Veículo cadastrado!");
+        try {
+            //pega o texto da janela do formulario
+            String nome = txtNome1.getText();
+            String cpf = txtCPF1.getText();
+            String cnh = txtCNH1.getText();
+            String categoria_cnh = cbCategoria1.getSelectedItem().toString();
+            String validade_cnh = txtValidade1.getText();
+
+            Motoristas obj = new Motoristas();
+            obj.setNome(nome);
+            obj.setCpf(cpf);
+            obj.setCnh(cnh);
+            obj.setCategoriaCnh(categoria_cnh);
+            obj.setValidadeCnh(validade_cnh);
+            
+            // criacao do obj DAO
+            MotoristasDAO DAO = new MotoristasDAO();
+
+            if (DAO.salvar(obj) == null) {
+                JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+                //atualiza tabela
+                refreshTable(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+            }
+        }
+        
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
     }//GEN-LAST:event_btnCadastrar1ActionPerformed
+
+    private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
+        int id = -1;
+
+        //pega a linha da tabela selecionada e extrai a placa
+        int linha = tblMotoristas1.getSelectedRow();
+        String login = tblMotoristas1.getValueAt(linha, 1).toString();
+        
+        //pega todos objetos da classe e pesquisa qual tem a msm placa
+        ArrayList<Motoristas> list = new ArrayList();
+        // criacao do obj DAO
+        MotoristasDAO DAO = new MotoristasDAO();
+        
+        //realiza a consulta
+        list = new MotoristasDAO().consultarTodos();
+        
+        //pega o id do objeto
+        for (int i = 0; i < list.size(); i++){
+            String searchCpf = list.get(i).getCpf();
+            
+            if (login.equals(searchCpf)) {
+                id = list.get(i).getIdMotorista();
+                break;
+            }
+            else{}
+        }
+        
+        var result = DAO.excluir(id);
+        
+        if (id == -1) {
+            JOptionPane.showMessageDialog(this, "ERRO!");
+        
+        }    else if (result == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+            
+        }   else if (result.contains("SQLIntegrityConstraintViolationException") == true) {
+            JOptionPane.showMessageDialog(this, "Exclusão é impossível, item faz parte de uma entrega.");
+        
+        }    else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+    }//GEN-LAST:event_btnExcluir1ActionPerformed
+
+    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
+        String isRight = null;
+
+        //pega todos os ids
+        ArrayList<Motoristas> list = new ArrayList();
+        list = new MotoristasDAO().consultarTodos();
+        
+        //loop pra pegar e salvar todas alteracoes na tabela
+        for (int i = 0;i < list.size(); i++) {
+            int id = list.get(i).getIdMotorista();
+            String nome = tblMotoristas1.getValueAt(i, 0).toString();
+            String cpf = tblMotoristas1.getValueAt(i, 1).toString();
+            String cnh = tblMotoristas1.getValueAt(i, 2).toString();
+            String categoria_cnh = tblMotoristas1.getValueAt(i, 3).toString();
+            String validade_cnh = tblMotoristas1.getValueAt(i, 4).toString();
+
+            // cricao obj
+            Motoristas obj = new Motoristas();
+            obj.setIdMotorista(id);
+            obj.setNome(nome);
+            obj.setCpf(cpf);
+            obj.setCnh(cnh);
+            obj.setCategoriaCnh(categoria_cnh);
+            obj.setValidadeCnh(validade_cnh);
+
+            // criacao do obj DAO
+            MotoristasDAO DAO = new MotoristasDAO();
+
+            isRight = DAO.atualizar(obj);
+        }
+        
+        if (isRight == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable(true);
+    }//GEN-LAST:event_btnEditar1ActionPerformed
+
+    private void btnLimpar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpar1ActionPerformed
+        txtNome1.setText("");
+        txtCPF1.setText("");
+        txtCNH1.setText("");
+        txtValidade1.setText("");
+    }//GEN-LAST:event_btnLimpar1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCadastrar1;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEditar1;
-    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnExcluir1;
-    private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnLimpar1;
-    private javax.swing.JComboBox<String> cbCategoria;
     private javax.swing.JComboBox<String> cbCategoria1;
-    private javax.swing.JFrame jFrame1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblMotoristas;
     private javax.swing.JTable tblMotoristas1;
-    private javax.swing.JTextField txtCNH;
     private javax.swing.JTextField txtCNH1;
-    private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JFormattedTextField txtCPF1;
-    private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtNome1;
-    private javax.swing.JFormattedTextField txtValidade;
     private javax.swing.JFormattedTextField txtValidade1;
     // End of variables declaration//GEN-END:variables
 }

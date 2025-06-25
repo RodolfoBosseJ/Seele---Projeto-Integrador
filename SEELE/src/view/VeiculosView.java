@@ -4,19 +4,27 @@
  */
 package view;
 
+import entidade.Veiculos;
+import dao.VeiculosDAO;
+
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+
 
 /**
  *
- * @author engenharia06
+ * @author engenharia06 & maicon-dias
  */
 public class VeiculosView extends javax.swing.JPanel {
 
     /**
      * Creates new form VeiculosView
      */
-    public VeiculosView() {
+    public VeiculosView(boolean permissao) {
         initComponents();
+        
+        //chama a funcao uma vez quando o programa eh iniciado
+        refreshTable(permissao);
     }
 
     /**
@@ -47,12 +55,7 @@ public class VeiculosView extends javax.swing.JPanel {
         btnExcluir1 = new javax.swing.JButton();
         btnLimpar1 = new javax.swing.JButton();
 
-        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbStatusActionPerformed(evt);
-            }
-        });
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ativo", "Manutenção" }));
 
         jLabel1.setText("Placa:");
 
@@ -69,30 +72,30 @@ public class VeiculosView extends javax.swing.JPanel {
         panelFormLayout.setHorizontalGroup(
             panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFormLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelFormLayout.createSequentialGroup()
+                .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFormLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panelFormLayout.createSequentialGroup()
+                        .addComponent(cbStatus, 0, 104, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFormLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtPlaca, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                            .addComponent(txtModelo))
-                        .addGap(10, 10, 10)
-                        .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCapacidade, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                            .addComponent(txtModelo))))
+                .addGap(10, 10, 10)
+                .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                    .addComponent(txtCapacidade))
+                .addContainerGap())
         );
         panelFormLayout.setVerticalGroup(
             panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,6 +130,22 @@ public class VeiculosView extends javax.swing.JPanel {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
@@ -143,10 +162,25 @@ public class VeiculosView extends javax.swing.JPanel {
         });
 
         btnEditar1.setText("Editar");
+        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditar1ActionPerformed(evt);
+            }
+        });
 
         btnExcluir1.setText("Excluir");
+        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluir1ActionPerformed(evt);
+            }
+        });
 
         btnLimpar1.setText("Limpar");
+        btnLimpar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpar1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -197,14 +231,187 @@ public class VeiculosView extends javax.swing.JPanel {
                 .addComponent(jScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+   
+    //Metodo para atualizacao da tabela
+    public void refreshTable (boolean permissao) {
+        if (permissao == false) {
+            btnCadastrar1.setEnabled(false);
+            btnEditar1.setEnabled(false);
+            btnExcluir1.setEnabled(false);
+            btnLimpar1.setEnabled(false);
+        }
+        
+        ArrayList<Veiculos> list = new ArrayList();
+        
+        //realiza a consulta
+        list = new VeiculosDAO().consultarTodos();
 
-    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbStatusActionPerformed
+        int numLinhas = tblVeiculos.getRowCount();
 
+        //verifica se a tabela precisa ser maior
+        //if (numLinhas < list.size()) {
+        //    tblVeiculos.insertRow();
+        //}
+        
+        //deleta os dados antigos da tabela
+        for (int i = 0; i < numLinhas; i++) {
+            tblVeiculos.setValueAt(null, i, 0);
+            tblVeiculos.setValueAt(null, i, 1);
+            tblVeiculos.setValueAt(null, i, 2);
+            tblVeiculos.setValueAt(null, i, 3);
+            tblVeiculos.setValueAt(null, i, 4);
+        }
+
+        //Imprime no console e muda o valor na tabela
+        for (int i = 0; i < list.size(); i++) {
+            Veiculos placa = Veiculos.class.cast(list.get(i));
+            tblVeiculos.setValueAt(placa.getPlaca(), i, 0);
+            
+            Veiculos modelo = Veiculos.class.cast(list.get(i));
+            tblVeiculos.setValueAt(modelo.getModelo(), i, 1);
+
+            Veiculos tipo = Veiculos.class.cast(list.get(i));
+            tblVeiculos.setValueAt(tipo.getTipo(), i, 2);
+
+            Veiculos capacidade = Veiculos.class.cast(list.get(i));
+            tblVeiculos.setValueAt(capacidade.getCapacidade(), i, 3);
+
+            Veiculos status = Veiculos.class.cast(list.get(i));
+            tblVeiculos.setValueAt(status.getStatus(), i, 4);
+        }
+    }
+    
     private void btnCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrar1ActionPerformed
-        JOptionPane.showMessageDialog(this, "Veículo cadastrado!");
+        try {
+            //pega o texto da janela do formulario
+            String placa = txtPlaca.getText();
+            String modelo = txtModelo.getText();
+            String tipo = txtTipo.getText();
+            String capacidade = txtCapacidade.getText();
+            String status = cbStatus.getSelectedItem().toString();
+
+            //converte capacidade para float
+            float capacidadeReal = Float.parseFloat(capacidade);
+
+            Veiculos obj = new Veiculos();
+            obj.setPlaca(placa);
+            obj.setModelo(modelo);
+            obj.setTipo(tipo);
+            obj.setCapacidade(capacidadeReal);
+            obj.setStatus(status);
+            
+            // criacao do obj DAO
+            VeiculosDAO DAO = new VeiculosDAO();
+
+            if (DAO.salvar(obj) == null) {
+                JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+                //atualiza tabela
+                refreshTable(true);
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+            }
+        }
+        
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+       
     }//GEN-LAST:event_btnCadastrar1ActionPerformed
+
+    private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
+        int id = -1;
+
+        //pega a linha da tabela selecionada e extrai a placa
+        int linha = tblVeiculos.getSelectedRow();
+        String placa = tblVeiculos.getValueAt(linha, 0).toString();
+        
+        //pega todos objetos da classe e pesquisa qual tem a msm placa
+        ArrayList<Veiculos> list = new ArrayList();
+        
+        //realiza a consulta
+        list = new VeiculosDAO().consultarTodos();
+        
+        //pega o id do objeto
+        for (int i = 0; i < list.size(); i++){
+            String searchPlaca = list.get(i).getPlaca();
+            
+            if (placa.equals(searchPlaca)) {
+                id = list.get(i).getIdVeiculo();
+                break;
+            }
+            else{}
+        }
+
+        // criacao do obj DAO
+        VeiculosDAO DAO = new VeiculosDAO();
+        
+        var result = DAO.excluir(id);
+        
+        if (id == -1) {
+            JOptionPane.showMessageDialog(this, "ERRO!");
+        
+        }    else if (result == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+            
+        }   else if (result.contains("SQLIntegrityConstraintViolationException") == true) {
+            JOptionPane.showMessageDialog(this, "Exclusão é impossível, item faz parte de uma entrega.");
+        
+        }    else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable(true);
+    }//GEN-LAST:event_btnExcluir1ActionPerformed
+
+    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
+        String isRight = null;
+
+        //pega todos os ids
+        ArrayList<Veiculos> list = new ArrayList();
+        list = new VeiculosDAO().consultarTodos();
+        
+        //loop pra pegar e salvar todas alteracoes na tabela
+        for (int i = 0;i < list.size(); i++) {
+            int idVeiculo = list.get(i).getIdVeiculo();
+            String placa = tblVeiculos.getValueAt(i, 0).toString();
+            String modelo = tblVeiculos.getValueAt(i, 1).toString();
+            String tipo = tblVeiculos.getValueAt(i, 2).toString();
+            float capacidade = Float.parseFloat(tblVeiculos.getValueAt(i, 3).toString());
+            String status = tblVeiculos.getValueAt(i, 4).toString();
+
+            // cricao obj
+            Veiculos obj = new Veiculos();
+            obj.setIdVeiculo(idVeiculo);
+            obj.setPlaca(placa);
+            obj.setModelo(modelo);
+            obj.setTipo(tipo);
+            obj.setCapacidade(capacidade);
+            obj.setStatus(status);
+
+            // criacao do obj DAO
+            VeiculosDAO DAO = new VeiculosDAO();
+
+            isRight = DAO.atualizar(obj);
+        }
+        
+        if (isRight == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable(true);
+    }//GEN-LAST:event_btnEditar1ActionPerformed
+
+    private void btnLimpar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpar1ActionPerformed
+        txtPlaca.setText("");
+        txtModelo.setText("");
+        txtTipo.setText("");
+        txtCapacidade.setText("");
+    }//GEN-LAST:event_btnLimpar1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -39,6 +39,11 @@ public class RelatoriosView extends javax.swing.JPanel {
         cbTipoRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veículos", "Motoristas", "Entregas" }));
 
         btnGerarRelatorio.setText("Gerar Relatório");
+        btnGerarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarRelatorioActionPerformed(evt);
+            }
+        });
 
         txtRelatorio.setColumns(20);
         txtRelatorio.setRows(5);
@@ -80,6 +85,10 @@ public class RelatoriosView extends javax.swing.JPanel {
                 .addComponent(scrollRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatorioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGerarRelatorioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

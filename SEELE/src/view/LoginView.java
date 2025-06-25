@@ -4,6 +4,10 @@
  */
 package view;
 
+import dao.UsuariosDAO;
+import entidade.Usuarios;
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -108,16 +112,32 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+        //debugging
+        //txtUsuario.setText("comum");
+        //txtSenha.setText("123");
+        
         String usuario = txtUsuario.getText();
-                String senha = new String(txtSenha.getPassword());
+        String senha = new String(txtSenha.getPassword());
 
-                if (usuario.equals("admin") && senha.equals("1234")) {
-                    JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-                    dispose(); // fecha tela de login
-                    new MenuPrincipalView().setVisible(true); // abre menu principal
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
-                }
+        ArrayList<Usuarios> list = new ArrayList();
+        list = new UsuariosDAO().consultarTodos();
+        
+        for (int i = 0; i < list.size(); i++) {
+            String usuario_certo = list.get(i).getLogin();
+            String senha_certa = list.get(i).getSenha();
+            
+            String permissao = list.get(i).getTipoAcesso();
+                    
+            if (usuario.equals(usuario_certo) && senha.equals(senha_certa)) {
+                JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
+                dispose(); // fecha tela de login
+                new MenuPrincipalView(permissao).setVisible(true); // abre menu principal
+                //termina a funcao
+                return;
+            } else {}
+        }
+        
+        JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     /**

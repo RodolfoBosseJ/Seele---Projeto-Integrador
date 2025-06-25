@@ -4,8 +4,11 @@
  */
 package view;
 
-import javax.swing.JOptionPane;
+import entidade.Usuarios;
+import dao.UsuariosDAO;
 
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
 /**
  *
  * @author engenharia06
@@ -17,6 +20,8 @@ public class UsuariosView extends javax.swing.JPanel {
      */
     public UsuariosView() {
         initComponents();
+        
+        refreshTable();
     }
 
     /**
@@ -62,10 +67,25 @@ public class UsuariosView extends javax.swing.JPanel {
         });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -98,6 +118,22 @@ public class UsuariosView extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
@@ -161,9 +197,155 @@ public class UsuariosView extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //Metodo para atualizacao da tabela
+    public void refreshTable () {
+        ArrayList<Usuarios> list = new ArrayList();
+        
+        //realiza a consulta
+        list = new UsuariosDAO().consultarTodos();
+
+        int numLinhas = jTable1.getRowCount();
+
+        //verifica se a tabela precisa ser maior
+        //if (numLinhas < list.size()) {
+        //    tblVeiculos.insertRow();
+        //}
+        
+        //deleta os dados antigos da tabela
+        for (int i = 0; i < numLinhas; i++) {
+            jTable1.setValueAt(null, i, 0);
+            jTable1.setValueAt(null, i, 1);
+            jTable1.setValueAt(null, i, 2);
+        }
+
+        //Imprime no console e muda o valor na tabela
+        for (int i = 0; i < list.size(); i++) {
+            Usuarios obj = Usuarios.class.cast(list.get(i));
+            
+            jTable1.setValueAt(obj.getNome(), i, 0);            
+            jTable1.setValueAt(obj.getLogin(), i, 1);
+            jTable1.setValueAt(obj.getTipoAcesso(), i, 2);
+        }
+    }
+    
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        JOptionPane.showMessageDialog(this, "Veículo cadastrado!");
+        try {
+            //pega o texto da janela do formulario
+            String nome = txtNomeUsuario.getText();
+            String login = txtEmail.getText();
+            String senha = txtSenha.getText();
+            String tipo_acesso = jComboBox1.getSelectedItem().toString();
+
+            Usuarios obj = new Usuarios();
+            obj.setNome(nome);
+            obj.setLogin(login);
+            obj.setSenha(senha);
+            obj.setTipoAcesso(tipo_acesso);
+            obj.setAtivo(true);
+            
+            // criacao do obj DAO
+            UsuariosDAO DAO = new UsuariosDAO();
+
+            if (DAO.salvar(obj) == null) {
+                JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+                //atualiza tabela
+                refreshTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+            }
+        }
+        
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int id = -1;
+
+        //pega a linha da tabela selecionada e extrai a placa
+        int linha = jTable1.getSelectedRow();
+        String login = jTable1.getValueAt(linha, 1).toString();
+        
+        //pega todos objetos da classe e pesquisa qual tem a msm placa
+        ArrayList<Usuarios> list = new ArrayList();
+        // criacao do obj DAO
+        UsuariosDAO DAO = new UsuariosDAO();
+        
+        //realiza a consulta
+        list = new UsuariosDAO().consultarTodos();
+        
+        //pega o id do objeto
+        for (int i = 0; i < list.size(); i++){
+            String searchLogin = list.get(i).getLogin();
+            
+            if (login.equals(searchLogin)) {
+                id = list.get(i).getIdUsuario();
+                break;
+            }
+            else{}
+        }
+        
+        if (id == -1) {
+            JOptionPane.showMessageDialog(this, "ERRO!");
+        }
+        else if (DAO.excluir(id) == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable();
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+       String isRight = null;
+
+        //pega todos os ids
+        ArrayList<Usuarios> list = new ArrayList();
+        list = new UsuariosDAO().consultarTodos();
+        
+        //loop pra pegar e salvar todas alteracoes na tabela
+        for (int i = 0;i < list.size(); i++) {
+            int id = list.get(i).getIdUsuario();
+            String nome = jTable1.getValueAt(i, 0).toString();
+            String login = jTable1.getValueAt(i, 1).toString();
+            String senha = list.get(i).getSenha();
+            String tipo_acesso = jTable1.getValueAt(i, 2).toString();
+            boolean ativo = list.get(i).getAtivo();
+
+            // cricao obj
+            Usuarios obj = new Usuarios();
+            obj.setIdUsuario(id);
+            obj.setNome(nome);
+            obj.setLogin(login);
+            obj.setSenha(senha);
+            obj.setTipoAcesso(tipo_acesso);
+            obj.setAtivo(ativo);
+
+            // criacao do obj DAO
+            UsuariosDAO DAO = new UsuariosDAO();
+
+            isRight = DAO.atualizar(obj);
+        }
+        
+        if (isRight == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txtEmail.setText("");
+        txtNomeUsuario.setText("");
+        txtSenha.setText("");
+    }//GEN-LAST:event_btnLimparActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,6 +4,8 @@
  */
 package view;
 
+import entidade.Autenticacao;
+
 /**
  *
  * @author engenharia06
@@ -13,13 +15,29 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipalView
      */
-    public MenuPrincipalView() {
+    public MenuPrincipalView(String permissao) {
         initComponents();
-        tabPrincipal.addTab("Veículos", new VeiculosView());
-        tabPrincipal.addTab("Motoristas", new MotoristasView());
-        tabPrincipal.addTab("Entregas", new EntregasView());
-        tabPrincipal.addTab("Relatórios", new RelatoriosView());
-        tabPrincipal.addTab("Usuários", new UsuariosView());
+        
+        //tabPrincipal.addTab("Relatórios", new RelatoriosView());
+        //so cria a aba usuario caso seja admin
+        if (permissao.equals("administrador")) {
+            tabPrincipal.addTab("Veículos", new VeiculosView(true));
+            tabPrincipal.addTab("Motoristas", new MotoristasView(true));
+            tabPrincipal.addTab("Entregas", new EntregasView(true));
+            tabPrincipal.addTab("Usuários", new UsuariosView());
+        }
+        
+        else if (permissao.equals("editor")) {
+            tabPrincipal.addTab("Veículos", new VeiculosView(true));
+            tabPrincipal.addTab("Motoristas", new MotoristasView(true));
+            tabPrincipal.addTab("Entregas", new EntregasView(true));
+        }
+        
+        else {
+            tabPrincipal.addTab("Veículos", new VeiculosView(false));
+            tabPrincipal.addTab("Motoristas", new MotoristasView(false));
+            tabPrincipal.addTab("Entregas", new EntregasView(false));
+        }
     }
 
     /**
@@ -80,7 +98,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuPrincipalView().setVisible(true);
+                new MenuPrincipalView("").setVisible(true);
             }
         });
     }

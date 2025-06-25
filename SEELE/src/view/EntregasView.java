@@ -4,6 +4,15 @@
  */
 package view;
 
+import dao.EntregasDAO;
+import dao.MotoristasDAO;
+import dao.VeiculosDAO;
+import entidade.Entregas;
+import entidade.Motoristas;
+import entidade.Veiculos;
+
+
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,8 +24,10 @@ public class EntregasView extends javax.swing.JPanel {
     /**
      * Creates new form EntregasView
      */
-    public EntregasView() {
+    public EntregasView(boolean permissao) {
         initComponents();
+        
+        refreshTable(permissao);
     }
 
     /**
@@ -30,7 +41,6 @@ public class EntregasView extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtDataEntrega = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         txtDestino = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -41,6 +51,7 @@ public class EntregasView extends javax.swing.JPanel {
         cbMotorista = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         cbVeiculo = new javax.swing.JComboBox<>();
+        txtDataEntrega = new javax.swing.JFormattedTextField();
         scrollTabela = new javax.swing.JScrollPane();
         tblEntregas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -50,8 +61,6 @@ public class EntregasView extends javax.swing.JPanel {
         btnLimpar = new javax.swing.JButton();
 
         jLabel1.setText("Data da Entrega:");
-
-        txtDataEntrega.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         jLabel2.setText("Destino:");
 
@@ -65,7 +74,21 @@ public class EntregasView extends javax.swing.JPanel {
 
         jLabel5.setText("Motorista:");
 
+        cbMotorista.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cbMotoristaFocusGained(evt);
+            }
+        });
+
         jLabel6.setText("Veiculo:");
+
+        cbVeiculo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cbVeiculoFocusGained(evt);
+            }
+        });
+
+        txtDataEntrega.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -78,38 +101,41 @@ public class EntregasView extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDataEntrega)
-                            .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDestino, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                            .addComponent(txtDataEntrega, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(40, 40, 40)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbMotorista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkCargaPerigosa))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cbMotorista, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbVeiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(chkCargaPerigosa)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtDataEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
+                    .addComponent(txtDataEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkCargaPerigosa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,11 +149,27 @@ public class EntregasView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(cbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         tblEntregas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -147,17 +189,32 @@ public class EntregasView extends javax.swing.JPanel {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(100, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -165,7 +222,7 @@ public class EntregasView extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(124, 124, 124))
+                .addGap(94, 94, 94))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +246,7 @@ public class EntregasView extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(scrollTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+            .addComponent(scrollTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,13 +255,216 @@ public class EntregasView extends javax.swing.JPanel {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scrollTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(scrollTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 631, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //Metodo para atualizacao da tabela
+    public void refreshTable (boolean permissao) {
+        if (permissao == false) {
+            btnCadastrar.setEnabled(false);
+            btnEditar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            btnLimpar.setEnabled(false);
+        }
+        
+        ArrayList <Entregas> list = new ArrayList();
+        
+        //realiza a consulta
+        list = new EntregasDAO().consultarTodos();
+
+        int numLinhas = tblEntregas.getRowCount();
+
+        //verifica se a tabela precisa ser maior
+        //if (numLinhas < list.size()) {
+        //    tblVeiculos.insertRow();
+        //}
+        
+        
+        //deleta os dados antigos da tabela
+        for (int i = 0; i < numLinhas; i++) {
+            tblEntregas.setValueAt(null, i, 0);
+            tblEntregas.setValueAt(null, i, 1);
+            tblEntregas.setValueAt(null, i, 2);
+            tblEntregas.setValueAt(null, i, 3);
+            tblEntregas.setValueAt(null, i, 4);
+            tblEntregas.setValueAt(null, i, 5);
+            tblEntregas.setValueAt(null, i, 6);
+        }
+        //busca o nome e placa correspondente
+        ArrayList<Motoristas> listMotoristas = new ArrayList();
+        listMotoristas = new MotoristasDAO().consultarTodos();
+        ArrayList<Veiculos> listVeiculos = new ArrayList();
+        listVeiculos = new VeiculosDAO().consultarTodos();
+        
+        //Imprime no console e muda o valor na tabela
+        for (int i = 0; i < list.size(); i++) {
+            Entregas obj = Entregas.class.cast(list.get(i));
+            
+            Motoristas objMotorista = Motoristas.class.cast(listMotoristas.get(obj.getIdMotorista() - 1));
+            Veiculos objVeiculo = Veiculos.class.cast(listVeiculos.get(obj.getIdVeiculo() - 1));
+            
+            tblEntregas.setValueAt(obj.getIdEntrega(), i, 0);
+            tblEntregas.setValueAt(obj.getDestino(), i, 1);
+            tblEntregas.setValueAt(obj.getStatus(), i, 2);
+            tblEntregas.setValueAt(obj.getCargaPerigosa(), i, 3);
+            tblEntregas.setValueAt(obj.getDataEntrega(), i, 4);
+            tblEntregas.setValueAt(objMotorista.getNome(), i, 5);
+            tblEntregas.setValueAt(objVeiculo.getPlaca(), i, 6);
+        }
+    }
+    
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        JOptionPane.showMessageDialog(this, "Veículo cadastrado!");
+        try {
+            //pega o texto da janela do formulario
+            String destino = txtDestino.getText();
+            String data_entrega = txtDataEntrega.getText();
+            boolean carga_perigosa = chkCargaPerigosa.isSelected();
+            String status = cbStatus.getSelectedItem().toString();
+            int id_motorista = Integer.parseInt(cbMotorista.getSelectedItem().toString());
+            int id_veiculo = Integer.parseInt(cbVeiculo.getSelectedItem().toString());
+
+            Entregas obj = new Entregas();
+            obj.setDestino(destino);
+            obj.setDataEntrega(data_entrega);
+            obj.setCargaPerigosa(carga_perigosa);
+            obj.setStatus (status);
+            obj.setIdMotorista(id_motorista);
+            obj.setIdVeiculo(id_veiculo);
+            
+            // criacao do obj DAO
+            EntregasDAO DAO = new EntregasDAO();
+
+            if (DAO.salvar(obj) == null) {
+                JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+                //atualiza tabela
+                refreshTable(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+            }
+        }
+        
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        } 
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        //pega a linha da tabela selecionada e extrai o id
+        int linha = tblEntregas.getSelectedRow();
+        int id = Integer.parseInt(tblEntregas.getValueAt(linha, 0).toString());
+        
+        // criacao do obj DAO
+        EntregasDAO DAO = new EntregasDAO();
+        
+        if (DAO.excluir(id) == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+        
+        refreshTable(true);
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+
+        String isRight = null;
+
+        //pega todos os ids
+        ArrayList<Entregas> list = new ArrayList();
+        list = new EntregasDAO().consultarTodos();
+
+        //busca o nome e placa correspondente
+        ArrayList<Motoristas> list_motoristas = new ArrayList();
+        list_motoristas = new MotoristasDAO().consultarTodos();
+        ArrayList<Veiculos> list_veiculos = new ArrayList();
+        list_veiculos = new VeiculosDAO().consultarTodos();
+
+        //loop pra pegar e salvar todas alteracoes na tabela
+        for (int i = 0; i < list.size(); i++) {
+            int id = Integer.parseInt(tblEntregas.getValueAt(i, 0).toString());
+            System.out.println(id);
+            String destino = tblEntregas.getValueAt(i, 1).toString();
+            String status = tblEntregas.getValueAt(i, 2).toString();
+            boolean carga_perigosa = Boolean.parseBoolean(tblEntregas.getValueAt(i, 3).toString());
+            String data_entrega = tblEntregas.getValueAt(i, 4).toString();
+
+            // cricao obj
+            Entregas obj = new Entregas();
+
+            String string_motorista = tblEntregas.getValueAt(i, 5).toString();
+            String string_veiculo = tblEntregas.getValueAt(i, 6).toString();
+
+            //pega o nome e placa e converte para int
+            for (int j = 0; j < list_motoristas.size(); j++) {
+                if (list_motoristas.get(j).getNome().equals(string_motorista)) {
+                    obj.setIdMotorista(j + 1);
+                } else {
+                }
+            }
+            
+            for (int j = 0; j < list_veiculos.size(); j++) {
+                if (list_veiculos.get(j).getPlaca().equals(string_veiculo)) {
+                    obj.setIdVeiculo(j + 1);
+                } else {
+                }
+            }
+
+            obj.setIdEntrega(id);
+            obj.setDestino(destino);
+            obj.setCargaPerigosa(carga_perigosa);
+            obj.setStatus(status);
+            obj.setDataEntrega(data_entrega);
+
+            // criacao do obj DAO
+            EntregasDAO DAO = new EntregasDAO();
+
+            isRight = DAO.atualizar(obj);
+        }
+
+        if (isRight == null) {
+            JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
+        }
+
+        refreshTable(true);
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txtDestino.setText("");
+        txtDataEntrega.setText("");
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void cbMotoristaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbMotoristaFocusGained
+        //pega todos objetos da classe e pesquisa qual tem a msm placa
+        ArrayList<Motoristas> list = new ArrayList();
+        //realiza a consulta
+        list = new MotoristasDAO().consultarTodos();
+        
+        cbMotorista.removeAllItems();
+        
+        for (int i = 0; i < list.size(); i++) {
+            cbMotorista.addItem(list.get(i).getNome());
+        }
+    }//GEN-LAST:event_cbMotoristaFocusGained
+
+    private void cbVeiculoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbVeiculoFocusGained
+        //pega todos objetos da classe e pesquisa qual tem a msm placa
+        ArrayList<Veiculos> list = new ArrayList();
+
+        list = new VeiculosDAO().consultarTodos();
+        
+        cbVeiculo.removeAllItems();
+        
+        for (int i = 0; i < list.size(); i++) {
+            cbVeiculo.addItem(list.get(i).getPlaca());
+        }
+    }//GEN-LAST:event_cbVeiculoFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
