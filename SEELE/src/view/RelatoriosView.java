@@ -4,6 +4,10 @@
  */
 package view;
 
+import apoio.ConexaoMySQL;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 /**
  *
  * @author engenharia06
@@ -37,6 +41,11 @@ public class RelatoriosView extends javax.swing.JPanel {
         jLabel1.setText("Selecione um Relatório:");
 
         cbTipoRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veículos", "Motoristas", "Entregas" }));
+        cbTipoRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTipoRelatorioActionPerformed(evt);
+            }
+        });
 
         btnGerarRelatorio.setText("Gerar Relatório");
         btnGerarRelatorio.addActionListener(new java.awt.event.ActionListener() {
@@ -87,8 +96,65 @@ public class RelatoriosView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatorioActionPerformed
-        // TODO add your handling code here:
+        String tipo = cbTipoRelatorio.getSelectedItem().toString();
+        txtRelatorio.setText("");
+        
+
+        try{
+            Statement st = ConexaoMySQL.getInstance().getConnection().createStatement();
+
+            switch (tipo) {
+                case "Veículos":
+                    String sql_veiculos = "SELECT placa, modelo, status FROM veiculos";
+                    
+                    ResultSet retorno_veiculos = st.executeQuery(sql_veiculos);
+                    txtRelatorio.append("RELATÓRIO DE VEÍCULOS:\n\n");
+                    while (retorno_veiculos.next()) {
+                        txtRelatorio.append(String.format("Placa: %s | Modelo: %s | Status: %s\n",
+                            retorno_veiculos.getString("placa"),
+                            retorno_veiculos.getString("modelo"),
+                            retorno_veiculos.getString("status")));
+                    }
+                    break;
+
+                case "Motoristas":
+                    String sql_motoristas = "SELECT nome, cnh, validade_cnh FROM motoristas";
+                    
+                    ResultSet retorno_motoristas = st.executeQuery(sql_motoristas);
+                    txtRelatorio.append("RELATÓRIO DE MOTORISTAS:\n\n");
+                    while (retorno_motoristas.next()) {
+                        txtRelatorio.append(String.format("Nome: %s | CNH: %s | Validade: %s\n",
+                            retorno_motoristas.getString("nome"),
+                            retorno_motoristas.getString("cnh"),
+                            retorno_motoristas.getDate("validade_cnh")));
+                    }
+                    break;
+
+                case "Entregas":
+                    String sql_entregas = "SELECT codigo, destino, status FROM entregas";
+                    
+                    ResultSet retorno_entregas = st.executeQuery(sql_entregas);
+                    txtRelatorio.append("RELATÓRIO DE ENTREGAS:\n\n");
+                    while (retorno_entregas.next()) {
+                        txtRelatorio.append(String.format("Código: %s | Destino: %s | Status: %s\n",
+                            retorno_entregas.getString("codigo"),
+                            retorno_entregas.getString("destino"),
+                            retorno_entregas.getString("status")));
+                    }
+                    break;
+
+                default:
+                    txtRelatorio.setText("Selecione um tipo válido de relatório.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao consultar base de dados: " + e);
+        }
     }//GEN-LAST:event_btnGerarRelatorioActionPerformed
+
+    private void cbTipoRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoRelatorioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbTipoRelatorioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

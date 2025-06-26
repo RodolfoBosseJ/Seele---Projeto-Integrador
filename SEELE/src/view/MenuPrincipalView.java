@@ -4,7 +4,6 @@
  */
 package view;
 
-import entidade.Autenticacao;
 
 /**
  *
